@@ -31,4 +31,4 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageCommand: go test -coverprofile=c.out ./...
-#          prefix: github.com/{{.Author}}/{{.RepoName}}
+          prefix: github.com/${GITHUB_REPOSITORY}
