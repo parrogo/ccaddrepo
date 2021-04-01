@@ -1,10 +1,30 @@
-// Package ccaddrepo export a function that adds a repository to CodeClimate
-// and add its report id as a secret to GitHub repository.
+// Package ccaddrepo allows to add a GitHub repository to CodeClimate
+// and setup its report id as a CC_TEST_REPORTER_ID secret in the repository.
+//
+// This two function works together in order to automate the setup of
+// a GitHub repository.
+//
+// If you are using this package in GitHub Actions,
+// you can easily publish coverages reports to CodeClimate
+// using e.g. [paambaati/codeclimate-action](https://github.com/paambaati/codeclimate-action)
 package ccaddrepo
 
-// Func answers
-func Func() int {
-	return 42
+// AddOnCodeClimate ask CodeClimate servers to add specified repo
+// The requests uses CodeClimate API, cctoken is an API token
+// that you can get here: https://codeclimate.com/profile/tokens
+//
+// The function return a string containing a CodeClimate TEST REPORTER ID
+// or in case of failure, an error value.
+func AddOnCodeClimate(githubRepo string, cctoken string) (string, error) {
+	return "", nil
+}
+
+// SetReporterIDSecret setup a secret on a github repository
+// named CC_TEST_REPORTER_ID containing the specified reporterID.
+// The function uses GitHub API to add the secret, so a ghtoken
+// has to be specified.
+func SetReporterIDSecret(githubRepo string, reporterID string, ghtoken string) error {
+	return nil
 }
 
 // echo '{"data":{"type": "repos","attributes": {"url": "https://github.com/'${GITHUB_REPOSITORY}'"}}}' > body.json

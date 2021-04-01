@@ -4,7 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
-	
+
 	"github.com/parrogo/ccaddrepo"
 )
 
@@ -12,8 +12,19 @@ import (
 var fixtureRootFS embed.FS
 var fixtureFS, _ = fs.Sub(fixtureRootFS, "fixtures")
 
-// This example show how to use ccaddrepo.Func()
-func ExampleFunc() {
-	fmt.Println(ccaddrepo.Func())
-	// Output: 42
+// This example show how to use ccaddrepo.AddOnCodeClimate()
+func ExampleAddOnCodeClimate() {
+	reporterID, err := ccaddrepo.AddOnCodeClimate("", "")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(reporterID)
+
+}
+
+func ExampleSetReporterIDSecret() {
+	err := ccaddrepo.SetReporterIDSecret("parro-it/examplerepo", "42", "ghtoken")
+	if err != nil {
+		panic(err)
+	}
 }
