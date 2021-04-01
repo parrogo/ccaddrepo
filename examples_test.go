@@ -1,19 +1,19 @@
-package {{.RepoName}}_test
+package ccaddrepo_test
 
 import (
 	"embed"
 	"fmt"
 	"io/fs"
 	
-	"github.com/{{.Author}}/{{.RepoName}}"
+	"github.com/parrogo/ccaddrepo"
 )
 
 //go:embed fixtures
 var fixtureRootFS embed.FS
 var fixtureFS, _ = fs.Sub(fixtureRootFS, "fixtures")
 
-// This example show how to use {{.RepoName}}.Func()
+// This example show how to use ccaddrepo.Func()
 func ExampleFunc() {
-	fmt.Println({{.RepoName}}.Func())
+	fmt.Println(ccaddrepo.Func())
 	// Output: 42
 }
