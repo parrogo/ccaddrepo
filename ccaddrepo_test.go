@@ -43,9 +43,9 @@ func TestParseResponse(t *testing.T) {
 }
 
 func TestSetReporterIDSecret(t *testing.T) {
-	cctoken, ok := os.LookupEnv("GITHUB_TOKEN")
+	cctoken, ok := os.LookupEnv("GH_WORKFLOW")
 	if !ok {
-		t.Fatalf("\nTO RUN THIS TEST, DECLARE A GITHUB_TOKEN ENV VAR WITH A GITHUB API TOKEN\n")
+		t.Fatalf("\nTO RUN THIS TEST, DECLARE A GH_WORKFLOW ENV VAR WITH A GITHUB API TOKEN\n")
 	}
 
 	err := SetReporterIDSecret("parrogo/ccaddrepo", "42", cctoken)
