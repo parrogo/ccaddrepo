@@ -21,10 +21,10 @@ jobs:
         env:
           CC_TOKEN: ${{ secrets.CC_TOKEN }}
 
-      - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v2.7.5
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageCommand: go test -coverprofile=c.out ./...
-          prefix: github.com/${{ github.repository }}
+#      - name: Test & publish code coverage
+#        uses: paambaati/codeclimate-action@v2.7.5
+#        env:
+#          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+#        with:
+#          coverageCommand: go test -coverprofile=c.out ./...
+#          prefix: github.com/${{ github.repository }}
