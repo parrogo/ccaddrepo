@@ -3,6 +3,7 @@ package ccaddrepo
 import (
 	"embed"
 	"io/fs"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -20,10 +21,25 @@ func TestPlaceHolder(t *testing.T) {
 }
 
 func TestAddOnCodeClimate(t *testing.T) {
-	reporterID, err := AddOnCodeClimate("", "")
-	if assert.NoError(t, err) {
-		assert.Equal(t, "", reporterID)
+	cctoken, ok := os.LookupEnv("CC_TOKEN")
+	if !ok {
+		t.Fatalf("\nTO RUN THIS TEST, DECLARE A CC_TOKEN ENV VAR WITH CODE CLIMATE TOKEN\n")
 	}
+
+	reporterID, err := AddOnCodeClimate("parrogo/ccaddrepo", cctoken)
+	if assert.NoError(t, err) && assert.NotEmpty(t, reporterID) {
+		assert.Greater(t, len(reporterID), 6)
+	}
+}
+
+func TestParseResponse(t *testing.T) {
+	response, err := fs.ReadFile(fixtureFS, "ccaddresponse.json")
+	if !assert.NoError(t, err) {
+		return
+	}
+	res, err := parse(response)
+	assert.Equal(t, "fakefakefake", res)
+
 }
 
 func TestSetReporterIDSecret(t *testing.T) {

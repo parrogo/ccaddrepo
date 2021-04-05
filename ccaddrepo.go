@@ -9,6 +9,18 @@
 // using e.g. [paambaati/codeclimate-action](https://github.com/paambaati/codeclimate-action)
 package ccaddrepo
 
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+)
+
+const ccGetURL = "https://api.codeclimate.com/v1/repos"
+const ccURL = "https://api.codeclimate.com/v1/github/repos"
+const ccBodyFormat = `{"data":{"type": "repos","attributes": {"url": "https://github.com/%s"}}}`
+
 // AddOnCodeClimate ask CodeClimate servers to add specified repo
 // The requests uses CodeClimate API, cctoken is an API token
 // that you can get here: https://codeclimate.com/profile/tokens
@@ -16,7 +28,57 @@ package ccaddrepo
 // The function return a string containing a CodeClimate TEST REPORTER ID
 // or in case of failure, an error value.
 func AddOnCodeClimate(githubRepo string, cctoken string) (string, error) {
-	return "", nil
+	var body bytes.Buffer
+
+	_, err := body.Write([]byte(fmt.Sprintf(ccBodyFormat, githubRepo)))
+	if err != nil {
+		return "", err
+	}
+
+	req, err := http.NewRequest("POST", ccURL, &body)
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Add("Accept", "application/vnd.api+json")
+	req.Header.Add("Authorization", "Token token="+cctoken)
+	req.Header.Add("Content-Type", "application/vnd.api+json")
+
+	var c http.Client
+	res, err := c.Do(req)
+	if err != nil {
+		return "", err
+	}
+
+	fmt.Println(res.Status)
+	// 201 Created
+	defer res.Body.Close()
+
+	resbuf, err := io.ReadAll(res.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return parse(resbuf)
+}
+
+func parse(resbuf []byte) (string, error) {
+	fmt.Println(string(resbuf))
+	var results commandResult
+	err := json.Unmarshal(resbuf, &results)
+	if err != nil {
+		return "", err
+	}
+	fmt.Println(results)
+	return results.Data.Attributes.TestReporterID, nil
+}
+
+type commandResult struct {
+	Data struct {
+		Attributes struct {
+			TestReporterID string `json:"test_reporter_id"`
+		}
+	}
 }
 
 // SetReporterIDSecret setup a secret on a github repository

@@ -1,0 +1,48 @@
+{
+    "data": {
+        "id": "fake",
+        "type": "repos",
+        "attributes": {
+            "analysis_version": 65432,
+            "badge_token": "fake",
+            "branch": "main",
+            "created_at": "2021-04-05T19:33:44.273Z",
+            "delegated_config_repo_id": "",
+            "diff_coverage_enforced": true,
+            "diff_coverage_threshold": 50,
+            "enable_notifications": true,
+            "github_slug": "parrogo/ccaddrepo",
+            "human_name": "ccaddrepo",
+            "last_activity_at": "2021-04-05T19:33:44.802Z",
+            "test_reporter_id": "fakefakefake",
+            "total_coverage_enforced": true,
+            "vcs_database_id": "fake",
+            "vcs_host": "https://github.com",
+            "score": null
+        },
+        "relationships": {
+            "latest_default_branch_snapshot": {
+                "data": null
+            },
+            "latest_default_branch_test_report": {
+                "data": null
+            },
+            "account": {
+                "data": null
+            }
+        },
+        "links": {
+            "self": "https://codeclimate.com/github/parrogo/ccaddrepo",
+            "services": "https://api.codeclimate.com/v1/repos/fake/services",
+            "web_coverage": "https://codeclimate.com/github/parrogo/ccaddrepo/coverage",
+            "web_issues": "https://codeclimate.com/github/parrogo/ccaddrepo/issues",
+            "maintainability_badge": "https://api.codeclimate.com/v1/badges/fake/maintainability",
+            "test_coverage_badge": "https://api.codeclimate.com/v1/badges/fake/test_coverage"
+        },
+        "meta": {
+            "permissions": {
+                "admin": true
+            }
+        }
+    }
+}
