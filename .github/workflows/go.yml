@@ -30,6 +30,7 @@ jobs:
         uses: paambaati/codeclimate-action@v2.7.5
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          GH_WORKFLOW: ${{ secrets.GH_WORKFLOW }}
         with:
           coverageCommand: go test -coverprofile=c.out ./...
           prefix: github.com/${{ github.repository }}
