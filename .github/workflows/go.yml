@@ -4,6 +4,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup test environment
+        run: |
+          sudo apt-get install libsodium-dev
+
       - name: Install Go
         uses: actions/setup-go@v2
         with:
