@@ -20,17 +20,17 @@ func TestPlaceHolder(t *testing.T) {
 	}
 }
 
-func TestAddOnCodeClimate(t *testing.T) {
-	cctoken, ok := os.LookupEnv("CC_TOKEN")
-	if !ok {
-		t.Fatalf("\nTO RUN THIS TEST, DECLARE A CC_TOKEN ENV VAR WITH CODE CLIMATE TOKEN\n")
-	}
-
-	reporterID, err := AddOnCodeClimate("parrogo/ccaddrepo", cctoken)
-	if assert.NoError(t, err) && assert.NotEmpty(t, reporterID) {
-		assert.Greater(t, len(reporterID), 6)
-	}
-}
+//func TestAddOnCodeClimate(t *testing.T) {
+//	cctoken, ok := os.LookupEnv("CC_TOKEN")
+//	if !ok {
+//		t.Fatalf("\nTO RUN THIS TEST, DECLARE A CC_TOKEN ENV VAR WITH CODE CLIMATE TOKEN\n")
+//	}
+//
+//	reporterID, err := AddOnCodeClimate("parrogo/ccaddrepo", cctoken)
+//	if assert.NoError(t, err) && assert.NotEmpty(t, reporterID) {
+//		assert.Greater(t, len(reporterID), 6)
+//	}
+//}
 
 func TestParseResponse(t *testing.T) {
 	response, err := fs.ReadFile(fixtureFS, "ccaddresponse.json")
@@ -43,7 +43,12 @@ func TestParseResponse(t *testing.T) {
 }
 
 func TestSetReporterIDSecret(t *testing.T) {
-	err := SetReporterIDSecret("parro-it/examplerepo", "42", "ghtoken")
+	cctoken, ok := os.LookupEnv("CC_TOKEN")
+	if !ok {
+		t.Fatalf("\nTO RUN THIS TEST, DECLARE A CC_TOKEN ENV VAR WITH CODE CLIMATE TOKEN\n")
+	}
+
+	err := SetReporterIDSecret("parrogo/ccaddrepo", "42", cctoken)
 	if assert.NoError(t, err) {
 		assert.Equal(t, nil, err)
 	}
