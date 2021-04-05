@@ -24,6 +24,7 @@ jobs:
           go vet ./...
         env:
           CC_TOKEN: ${{ secrets.CC_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #      - name: Test & publish code coverage
 #        uses: paambaati/codeclimate-action@v2.7.5
