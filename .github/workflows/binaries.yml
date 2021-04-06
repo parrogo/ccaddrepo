@@ -24,11 +24,11 @@ jobs:
       run: |
         mkdir out
         for name in `find cli -type d`; do
-          go build -o out/$name cli/$name -ldflags="-X 'main.Version="$GIT_TAG_NAME"'" 
+          go build -o out/$name -ldflags="-X 'main.Version="$GIT_TAG_NAME"'" ./cli/$name
           ./$name -v
         done
     
-    
+
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
