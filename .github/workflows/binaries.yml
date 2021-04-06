@@ -9,6 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    
+    - name: Setup test environment
+      run: |
+        sudo apt-get install libsodium-dev
 
     - uses: olegtarasov/get-tag@v2.1
       id: tagName
