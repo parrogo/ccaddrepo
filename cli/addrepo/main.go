@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/parrogo/ccaddrepo"
 )
 
 // Version of the command
@@ -52,7 +54,7 @@ func main() {
 	}
 
 	fmt.Println(options.repo, options.token)
-	reporterID, err := "boh", error(nil) //ccaddrepo.AddOnCodeClimate(options.repo, options.token)
+	reporterID, err := ccaddrepo.AddOnCodeClimate(options.repo, options.token)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, err.Error())
 		os.Exit(1)
