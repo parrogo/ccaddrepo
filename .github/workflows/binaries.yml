@@ -22,8 +22,8 @@ jobs:
 
     - name: Build binaries
       run: |
-        mkdir out
-        for name in `find cli -type d`; do
+        mkdir -p out
+        for name in `find cli -type d | tail -n +2`; do
           go build -o out/$name -ldflags="-X 'main.Version="$GIT_TAG_NAME"'" ./cli/$name
           ./$name -v
         done
