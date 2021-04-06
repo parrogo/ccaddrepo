@@ -53,7 +53,6 @@ func main() {
 		usage("t flag not specified")
 	}
 
-	fmt.Println(options.repo, options.token)
 	reporterID, err := ccaddrepo.AddOnCodeClimate(options.repo, options.token)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, err.Error())
