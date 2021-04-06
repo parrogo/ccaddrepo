@@ -76,10 +76,21 @@ func AddOnCodeClimate(githubRepo string, cctoken string) (string, error) {
 	for reporterID == "" {
 		fmt.Println("reporterID is null, retry in 1 second...")
 		time.Sleep(time.Second)
-		res, err := http.Get("https://api.codeclimate.com/v1/repos?github_slug=" + githubRepo)
+		req, err := http.NewRequest("GET", "https://api.codeclimate.com/v1/repos?github_slug="+githubRepo, nil)
 		if err != nil {
 			return "", err
 		}
+
+		req.Header.Add("Accept", "application/vnd.api+json")
+		req.Header.Add("Authorization", "Token token="+cctoken)
+		req.Header.Add("Content-Type", "application/vnd.api+json")
+
+		var c http.Client
+		res, err := c.Do(req)
+		if err != nil {
+			return "", err
+		}
+
 		defer res.Body.Close()
 
 		resbuf, err := io.ReadAll(res.Body)
@@ -96,7 +107,7 @@ func AddOnCodeClimate(githubRepo string, cctoken string) (string, error) {
 }
 
 func parse(resbuf []byte) (string, error) {
-	fmt.Println(string(resbuf))
+	fmt.Println("parse", string(resbuf))
 	var results commandResult
 	err := json.Unmarshal(resbuf, &results)
 	if err != nil {
