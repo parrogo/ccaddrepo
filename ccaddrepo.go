@@ -19,6 +19,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 
 	sodium "github.com/GoKillers/libsodium-go/cryptobox"
 	"github.com/google/go-github/v34/github"
@@ -67,7 +68,31 @@ func AddOnCodeClimate(githubRepo string, cctoken string) (string, error) {
 		return "", err
 	}
 
-	return parse(resbuf)
+	reporterID, err := parse(resbuf)
+	if err != nil {
+		return "", err
+	}
+
+	for reporterID == "" {
+		time.Sleep(time.Second)
+		res, err := http.Get("https://api.codeclimate.com/v1/repos?github_slug=" + githubRepo)
+		if err != nil {
+			return "", err
+		}
+		defer res.Body.Close()
+
+		resbuf, err := io.ReadAll(res.Body)
+		if err != nil {
+			return "", err
+		}
+		fmt.Println(string(resbuf))
+		reporterID, err = parse(resbuf)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return reporterID, nil
 }
 
 func parse(resbuf []byte) (string, error) {
