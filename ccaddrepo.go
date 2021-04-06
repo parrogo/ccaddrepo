@@ -74,6 +74,7 @@ func AddOnCodeClimate(githubRepo string, cctoken string) (string, error) {
 	}
 
 	for reporterID == "" {
+		fmt.Println("reporterID is null, retry in 1 second...")
 		time.Sleep(time.Second)
 		res, err := http.Get("https://api.codeclimate.com/v1/repos?github_slug=" + githubRepo)
 		if err != nil {
@@ -85,7 +86,6 @@ func AddOnCodeClimate(githubRepo string, cctoken string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		fmt.Println(string(resbuf))
 		reporterID, err = parse(resbuf)
 		if err != nil {
 			return "", err
