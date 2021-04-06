@@ -23,9 +23,10 @@ jobs:
     - name: Build binaries
       run: |
         mkdir -p out
-        for name in `find cli -type d | tail -n +2`; do
+        for dir in `find cli -type d | tail -n +2`; do
+          name=`basename $dir`
           go build -o out/$name -ldflags="-X 'main.Version="$GIT_TAG_NAME"'" ./cli/$name
-          ./$name -v
+          ./out/$name -v
         done
     
 
