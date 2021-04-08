@@ -13,8 +13,9 @@ var fixtureRootFS embed.FS
 var fixtureFS, _ = fs.Sub(fixtureRootFS, "fixtures")
 
 // This example show how to use ccaddrepo.AddOnCodeClimate()
-func ExampleAddOnCodeClimate() {
-	reporterID, err := ccaddrepo.AddOnCodeClimate("", "")
+func ExampleCodeClimate() {
+	cc := ccaddrepo.CodeClimate("token")
+	reporterID, err := cc.AddRepo("author/repo")
 	if err != nil {
 		panic(err)
 	}
