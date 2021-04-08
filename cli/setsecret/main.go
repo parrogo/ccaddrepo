@@ -6,6 +6,8 @@ import (
 	"io"
 	"os"
 	"strings"
+
+	"github.com/parrogo/ccaddrepo"
 )
 
 // Version of the command
@@ -67,8 +69,8 @@ func main() {
 		usage("t flag not specified")
 	}
 
-	fmt.Println(options.repo, options.token, options.reporterID)
-	/*fatal(ccaddrepo.SetReporterIDSecret(options.repo, options.reporterID, options.token))
-	 */
+	//fmt.Println(options.repo, options.token, options.reporterID)
+	fatal(ccaddrepo.SetReporterIDSecret(options.repo, options.reporterID, options.token))
+
 	fmt.Println("CodeCLimate reporter ID stored in secrets.CC_TEST_REPORTER_ID")
 }
