@@ -70,12 +70,12 @@ func (cc CodeClimate) GetRepoID(reposlug string) (string, error) {
 		}
 	}
 
-	_, err := cc.doRequest("GET", "repos?github_slug="+reposlug, nil, &response)
+	rowdata, err := cc.doRequest("GET", "repos?github_slug="+reposlug, nil, &response)
 	if err != nil {
 		return "", err
 	}
 	if len(response.Data) == 0 {
-		return "", fmt.Errorf("repository not found: %s", reposlug)
+		return "", fmt.Errorf("repository not found: %s\nRESPONSE: %s", reposlug, rowdata)
 	}
 	data := response.Data[0]
 	return data.ID, nil
