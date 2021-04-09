@@ -89,7 +89,12 @@ func main() {
 	}
 
 	//fmt.Println(options.repo, options.token, options.reporterID)
-	fatal(ccaddrepo.SetReporterIDSecret(options.repo, options.reporterID, options.token))
+	fatal(ccaddrepo.SetReporterIDSecret(ccaddrepo.SecretsOptions{
+		RepoSlug:   options.repo,
+		GHToken:    options.token,
+		ReporterID: options.repo,
+		BadgeID:    options.badgeID,
+		ID:         options.ID,
+	}))
 
-	fmt.Println("CodeCLimate reporter ID stored in secrets.CC_TEST_REPORTER_ID")
 }

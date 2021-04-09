@@ -26,7 +26,13 @@ func TestSetReporterIDSecret(t *testing.T) {
 		t.Fatalf("\nTO RUN THIS TEST, DECLARE A GH_WORKFLOW ENV VAR WITH A GITHUB API TOKEN\n")
 	}
 
-	err := SetReporterIDSecret("parrogo/ccaddrepo", "42", cctoken)
+	err := SetReporterIDSecret(SecretsOptions{
+		RepoSlug:   "parrogo/ccaddrepo",
+		GHToken:    cctoken,
+		ReporterID: "42",
+		BadgeID:    "43",
+		ID:         "44",
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, nil, err)
 	}

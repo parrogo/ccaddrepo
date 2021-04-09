@@ -21,23 +21,45 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// SecretsOptions contains all the options
+// to setup Code Climate related secrets in a
+// GH repo.
+type SecretsOptions struct {
+	RepoSlug   string
+	GHToken    string
+	ReporterID string
+	BadgeID    string
+	ID         string
+}
+
 // SetReporterIDSecret setup a secret on a github repository
 // named CC_TEST_REPORTER_ID containing the specified reporterID.
 // The function uses GitHub API to add the secret, so a ghtoken
 // has to be specified.
-func SetReporterIDSecret(githubRepo string, reporterID string, ghtoken string) error {
-	parts := strings.Split(githubRepo, "/")
+func SetReporterIDSecret(options SecretsOptions) error {
+	parts := strings.Split(options.RepoSlug, "/")
 	owner := parts[0]
 	repo := parts[1]
 
-	ctx, client, err := githubAuth(ghtoken)
+	ctx, client, err := githubAuth(options.GHToken)
 	if err != nil {
 		return fmt.Errorf("unable to authorize using env GITHUB_AUTH_TOKEN: %w", err)
 	}
 
-	if err := addRepoSecret(ctx, client, owner, repo, "CC_TEST_REPORTER_ID", reporterID); err != nil {
+	if err := addRepoSecret(ctx, client, owner, repo, "CC_REPO_ID", options.ID); err != nil {
 		return err
 	}
+	fmt.Println("CodeCLimate repo ID stored in secrets.CC_REPO_ID")
+
+	if err := addRepoSecret(ctx, client, owner, repo, "CC_TEST_REPORTER_ID", options.ReporterID); err != nil {
+		return err
+	}
+	fmt.Println("CodeCLimate test reporter ID stored in secrets.CC_TEST_REPORTER_ID")
+
+	if err := addRepoSecret(ctx, client, owner, repo, "CC_BADGE", options.BadgeID); err != nil {
+		return err
+	}
+	fmt.Println("CodeCLimate badge ID stored in secrets.CC_BADGE")
 
 	return nil
 }

@@ -24,7 +24,13 @@ func ExampleCodeClimate() {
 }
 
 func ExampleSetReporterIDSecret() {
-	err := ccaddrepo.SetReporterIDSecret("parro-it/examplerepo", "42", "ghtoken")
+	err := ccaddrepo.SetReporterIDSecret(ccaddrepo.SecretsOptions{
+		RepoSlug:   "",
+		GHToken:    "",
+		ReporterID: "",
+		BadgeID:    "",
+		ID:         "",
+	})
 	if err != nil {
 		panic(err)
 	}
