@@ -115,7 +115,7 @@ func (cc CodeClimate) GetOwnOrgID(orgname string) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("org ID `%s` not found in response data\nDATA:\n%v", orgname, rowdata)
+	return "", fmt.Errorf("org ID `%s` not found in response data\nRESPONSE:\n%v", orgname, rowdata)
 }
 
 // AddRepo create a repository within an organization
