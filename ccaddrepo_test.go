@@ -60,12 +60,14 @@ func TestAddRepo(t *testing.T) {
 			}
 		}
 
-		reporterID, err := cc.AddRepo("parrogo/centro")
+		repo, err := cc.AddRepo("parrogo/centro")
 		if !assert.NoError(t, err) {
 			return
 		}
 
-		assert.Greater(t, len(reporterID), 10)
+		assert.Greater(t, len(repo.Data.ID), 10)
+		assert.Greater(t, len(repo.Data.Attributes.BadgeTokenID), 10)
+		assert.Greater(t, len(repo.Data.Attributes.TestReporterID), 10)
 	})
 }
 func TestDeleteRepo(t *testing.T) {

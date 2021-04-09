@@ -1,9 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"strings"
 
@@ -18,6 +18,8 @@ var options struct {
 	repo       string
 	token      string
 	reporterID string
+	badgeID    string
+	ID         string
 }
 
 func fatal(err error) {
@@ -42,7 +44,9 @@ func main() {
 
 	flag.StringVar(&options.repo, "r", repoDefault, "GitHub user/repo of the repository you want to add")
 	flag.StringVar(&options.token, "t", tokenDefault, "GitHub API token")
-	flag.StringVar(&options.reporterID, "id", "", "CodeCLimate reporter ID")
+	flag.StringVar(&options.ID, "id", "", "CodeCLimate repo ID")
+	flag.StringVar(&options.reporterID, "testrepid", "", "CodeCLimate repo test reporter ID")
+	flag.StringVar(&options.badgeID, "badgeid", "", "CodeCLimate repo badge ID")
 
 	flag.Parse()
 
@@ -52,15 +56,30 @@ func main() {
 	}
 
 	if options.reporterID == "" {
-		stdin, err := io.ReadAll(os.Stdin)
+		stdinbuf := bufio.NewReader(os.Stdin)
+
+		linebuf, err := stdinbuf.ReadBytes('\n')
 		fatal(err)
-		options.reporterID = strings.Trim(string(stdin), " \t\r\n")
+		options.ID = strings.Trim(string(linebuf), " \t\r\n")
+
+		linebuf, err = stdinbuf.ReadBytes('\n')
+		fatal(err)
+		options.reporterID = strings.Trim(string(linebuf), " \t\r\n")
+
+		linebuf, err = stdinbuf.ReadBytes('\n')
+		fatal(err)
+		options.badgeID = strings.Trim(string(linebuf), " \t\r\n")
 	}
 
-	if options.reporterID == "" {
+	if options.ID == "" {
 		usage("id flag not specified")
 	}
-
+	if options.badgeID == "" {
+		usage("badgeid flag not specified")
+	}
+	if options.reporterID == "" {
+		usage("testrepid flag not specified")
+	}
 	if options.repo == "" {
 		usage("r flag not specified")
 	}

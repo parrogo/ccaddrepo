@@ -118,23 +118,28 @@ func (cc CodeClimate) GetOwnOrgID(orgname string) (string, error) {
 	return "", fmt.Errorf("org ID `%s` not found in response data\nRESPONSE:\n%v", orgname, rowdata)
 }
 
-// AddRepo create a repository within an organization
-// and return the reporter ID.
-func (cc CodeClimate) AddRepo(reposlug string) (string, error) {
-	var response struct {
-		Data struct {
-			Attributes struct {
-				TestReporterID string `json:"test_reporter_id"`
-			}
+// RepoInfo represents the information retrieved from a repo
+type RepoInfo struct {
+	Data struct {
+		ID         string
+		Attributes struct {
+			TestReporterID string `json:"test_reporter_id"`
+			BadgeTokenID   string `json:"badge_token"`
 		}
 	}
+}
+
+// AddRepo create a repository within an organization
+// and return the reporter ID.
+func (cc CodeClimate) AddRepo(reposlug string) (*RepoInfo, error) {
+	var response RepoInfo
 
 	parts := strings.Split(reposlug, "/")
 	org := parts[0]
 
 	orgID, err := cc.GetOwnOrgID(org)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	URL := fmt.Sprintf("orgs/%s/repos", orgID)
@@ -143,12 +148,14 @@ func (cc CodeClimate) AddRepo(reposlug string) (string, error) {
 
 	_, err = body.Write([]byte(fmt.Sprintf(ccBodyFormat, reposlug)))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	_, err = cc.doRequest("POST", URL, &body, &response)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return response.Data.Attributes.TestReporterID, nil
+	//fmt.Println(res)
+
+	return &response, nil
 }

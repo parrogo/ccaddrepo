@@ -59,5 +59,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, err.Error())
 		os.Exit(1)
 	}
-	fmt.Println(reporterID)
+	fmt.Println(reporterID.Data.ID)
+	fmt.Println(reporterID.Data.Attributes.TestReporterID)
+	fmt.Println(reporterID.Data.Attributes.BadgeTokenID)
 }
