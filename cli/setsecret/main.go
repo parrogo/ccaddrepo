@@ -92,7 +92,7 @@ func main() {
 	fatal(ccaddrepo.SetReporterIDSecret(ccaddrepo.SecretsOptions{
 		RepoSlug:   options.repo,
 		GHToken:    options.token,
-		ReporterID: options.repo,
+		ReporterID: options.reporterID,
 		BadgeID:    options.badgeID,
 		ID:         options.ID,
 	}))
