@@ -23,7 +23,7 @@ jobs:
           golint -set_exit_status ./...
           go vet ./...
         env:
-          CC_TOKEN: ${{ secrets.CC_TOKEN }}
+          CC_TOKEN: ${{ secrets.CODE_CLIMATE_TOKEN }}
           GH_WORKFLOW: ${{ secrets.GH_WORKFLOW }}
 
 #      - name: Test & publish code coverage
