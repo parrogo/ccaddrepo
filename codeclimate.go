@@ -27,10 +27,10 @@ const ccBodyFormat = `{"data":{"type": "repos","attributes": {"url": "https://gi
 // session on Code Climate.
 type CodeClimate string
 
-func (cc CodeClimate) doRequest(method string, URL string, body io.Reader, response interface{}) error {
+func (cc CodeClimate) doRequest(method string, URL string, body io.Reader, response interface{}) (string, error) {
 	req, err := http.NewRequest(method, ccBaseURL+URL, body)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	req.Header.Add("Accept", "application/vnd.api+json")
@@ -39,22 +39,26 @@ func (cc CodeClimate) doRequest(method string, URL string, body io.Reader, respo
 	var c http.Client
 	res, err := c.Do(req)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	defer res.Body.Close()
 
-	if response == nil {
-		return nil
-	}
-
 	resbuf, err := io.ReadAll(res.Body)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	//fmt.Println(string(resbuf))
-	return json.Unmarshal(resbuf, response)
+	if response == nil {
+		return string(resbuf), nil
+	}
+
+	err = json.Unmarshal(resbuf, response)
+	if err != nil {
+		return "", err
+	}
+
+	return string(resbuf), nil
 
 }
 
@@ -66,7 +70,7 @@ func (cc CodeClimate) GetRepoID(reposlug string) (string, error) {
 		}
 	}
 
-	err := cc.doRequest("GET", "repos?github_slug="+reposlug, nil, &response)
+	_, err := cc.doRequest("GET", "repos?github_slug="+reposlug, nil, &response)
 	if err != nil {
 		return "", err
 	}
@@ -81,7 +85,7 @@ func (cc CodeClimate) GetRepoID(reposlug string) (string, error) {
 // DeleteRepo remove a repository from CodeClimate
 func (cc CodeClimate) DeleteRepo(repoid string) error {
 
-	err := cc.doRequest("DELETE", "repos/"+repoid, nil, nil)
+	_, err := cc.doRequest("DELETE", "repos/"+repoid, nil, nil)
 	if err != nil {
 		return err
 	}
@@ -101,7 +105,7 @@ func (cc CodeClimate) GetOwnOrgID(orgname string) (string, error) {
 		}
 	}
 
-	err := cc.doRequest("GET", "orgs", nil, &response)
+	rowdata, err := cc.doRequest("GET", "orgs", nil, &response)
 	if err != nil {
 		return "", err
 	}
@@ -111,7 +115,7 @@ func (cc CodeClimate) GetOwnOrgID(orgname string) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("org ID `%s` not found in response data\nDATA:\n%v", orgname, response.Data)
+	return "", fmt.Errorf("org ID `%s` not found in response data\nDATA:\n%v", orgname, rowdata)
 }
 
 // AddRepo create a repository within an organization
@@ -142,7 +146,7 @@ func (cc CodeClimate) AddRepo(reposlug string) (string, error) {
 		return "", err
 	}
 
-	err = cc.doRequest("POST", URL, &body, &response)
+	_, err = cc.doRequest("POST", URL, &body, &response)
 	if err != nil {
 		return "", err
 	}
